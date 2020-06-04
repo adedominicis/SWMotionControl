@@ -6,7 +6,80 @@
              xmlns:local="clr-namespace:AddinTesting"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
-    <Grid>
-        <Button Content="Click me :)" Click="Button_Click" />
+    <Grid Background="Linen">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+          
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="60"/>
+            <RowDefinition Height="60"/>
+            <RowDefinition Height="60"/>
+            <RowDefinition Height="60"/>
+            <RowDefinition Height="60"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <Label Grid.Row="0" Grid.Column="0"
+               VerticalAlignment="Center"
+               HorizontalAlignment="Center"
+               FontSize="12"
+               FontWeight="Bold">LEFT AXIS</Label>
+        <Label Grid.Row="1" Grid.Column="0"
+               VerticalAlignment="Center"
+               HorizontalAlignment="Center"
+               FontSize="12"
+               FontWeight="Bold">RIGHT AXIS</Label>
+
+        <Label Grid.Row="2" Grid.Column="0"
+               VerticalAlignment="Center"
+               HorizontalAlignment="Center"
+               FontSize="12"
+               FontWeight="Bold">BUTTONS</Label>
+
+        <Label Grid.Row="3" Grid.Column="0"
+               VerticalAlignment="Center"
+               HorizontalAlignment="Center"
+               FontSize="12"
+               FontWeight="Bold">LEFT TRIGGER</Label>
+
+        <Label Grid.Row="4" Grid.Column="0"
+               VerticalAlignment="Center"
+               HorizontalAlignment="Center"
+               FontSize="12"
+               FontWeight="Bold">RIGHT TRIGGER</Label>
+
+        <TextBox Grid.Row="0" Grid.Column="1"
+               Text="{Binding LeftAxis, UpdateSourceTrigger=PropertyChanged,Mode=OneWay}"
+               VerticalAlignment="Center"
+               HorizontalAlignment="Center"
+               FontSize="12"
+               FontWeight="Bold"/>
+        <TextBox Grid.Row="1" Grid.Column="1"
+               Text="{Binding RightAxis, UpdateSourceTrigger=PropertyChanged,Mode=OneWay}"
+               VerticalAlignment="Center"
+               HorizontalAlignment="Center"
+               FontSize="12"
+               FontWeight="Bold"/>
+
+        <TextBox Grid.Row="2" Grid.Column="1"
+               Text="{Binding Buttons, UpdateSourceTrigger=PropertyChanged,Mode=OneWay}"
+               VerticalAlignment="Center"
+               HorizontalAlignment="Center"
+               FontSize="12"
+               FontWeight="Bold"/>
+        <TextBox Grid.Row="3" Grid.Column="1"
+               Text="{Binding LeftTrigger, UpdateSourceTrigger=PropertyChanged,Mode=OneWay}"
+               VerticalAlignment="Center"
+               HorizontalAlignment="Center"
+               FontSize="12"
+               FontWeight="Bold"/>
+        <TextBox Grid.Row="4" Grid.Column="1"
+               Text="{Binding RightTrigger, UpdateSourceTrigger=PropertyChanged,Mode=OneWay}"
+               VerticalAlignment="Center"
+               HorizontalAlignment="Center"
+               FontSize="12"
+               FontWeight="Bold"/>
     </Grid>
 </UserControl>

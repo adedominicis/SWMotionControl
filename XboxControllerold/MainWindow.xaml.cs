@@ -12,12 +12,31 @@ namespace XboxController
     public partial class MainWindow : INotifyPropertyChanged
     {
         DispatcherTimer _timer = new DispatcherTimer();
+        private Controller _controller;
+
+
         private string _leftAxis;
         private string _rightAxis;
         private string _buttons;
-        private Controller _controller;
         private string rightTrigger;
         private string leftTrigger;
+
+        // Thumbstick percentage
+        double ltsXPercent;
+        double ltsYPercent;
+        double rtsXPercent;
+        double rtsYPercent;
+
+        //Trigger percentage
+        double rtrgPercent;
+        double ltrgPercent;
+
+
+        // Thumbstick + limits. - Limits are symmetrical
+        private const int tsRightLimit = 32767;
+        private const int tsUpperLimit = 32767;
+        private const int triggerLimit = 255;
+
 
         public MainWindow()
         {
@@ -25,7 +44,8 @@ namespace XboxController
             Loaded += MainWindow_Loaded;
             Closing += MainWindow_Closing;
             InitializeComponent();
-            _timer = new DispatcherTimer { Interval = TimeSpan.FromMilliseconds(100) };
+            _timer = new DispatcherTimer();
+            _timer.Interval = TimeSpan.FromMilliseconds(20);
             _timer.Tick += _timer_Tick;
             _timer.Start();
         }
@@ -37,17 +57,23 @@ namespace XboxController
 
         void DisplayControllerInformation()
         {
-            byte RT,LT;
-
             var state = _controller.GetState();
-            
-            RT= state.Gamepad.RightTrigger;
-            LT =state.Gamepad.LeftTrigger;
-            RightTrigger = RT.ToString();
-            LeftTrigger = LT.ToString();
-            LeftAxis = string.Format("X: {0} Y: {1}", state.Gamepad.LeftThumbX, state.Gamepad.LeftThumbY);
-            RightAxis = string.Format("X: {0} Y: {1}", state.Gamepad.RightThumbX, state.Gamepad.RightThumbX);
-            //Buttons = string.Format("A: {0} B: {1} X: {2} Y: {3}", state.Gamepad.Buttons.ToString(), state.Gamepad.LeftThumbY);
+
+            // Thumbstick percentage
+            ltsXPercent = Math.Round(100 - ((double)(tsRightLimit - state.Gamepad.LeftThumbX) / tsRightLimit) * 100);
+            ltsYPercent = Math.Round(100 - ((double)(tsUpperLimit - state.Gamepad.LeftThumbY) / tsUpperLimit) * 100);
+            rtsXPercent = Math.Round(100 - ((double)(tsRightLimit - state.Gamepad.RightThumbX) / tsRightLimit) * 100);
+            rtsYPercent = Math.Round(100 - ((double)(tsUpperLimit - state.Gamepad.RightThumbY) / tsUpperLimit) * 100);
+
+            // Trigger percentage
+
+            rtrgPercent = Math.Round(100 - ((double)(triggerLimit - state.Gamepad.RightTrigger) / triggerLimit) * 100);
+            ltrgPercent = Math.Round(100 - ((double)(triggerLimit - state.Gamepad.LeftTrigger) / triggerLimit) * 100);
+
+            RightTrigger = rtrgPercent.ToString();
+            LeftTrigger = ltrgPercent.ToString();
+            LeftAxis = string.Format("X: {0} % Y: {1} %", ltsXPercent, ltsYPercent);
+            RightAxis = string.Format("X: {0} % Y: {1} %", rtsXPercent, rtsYPercent);
             Buttons = string.Format("{0}", state.Gamepad.Buttons);
 
         }

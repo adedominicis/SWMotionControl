@@ -1,5 +1,15 @@
-﻿using System.Windows.Controls;
+﻿using System.ComponentModel;
+using System.Windows.Controls;
 using static AngelSix.SolidDna.SolidWorksEnvironment;
+using System.Globalization;
+using System.Runtime.CompilerServices;
+using System.Windows;
+using System.Windows.Threading;
+using SharpDX.XInput;
+using System;
+using AddinTesting.ViewModel;
+using AddinTesting.model;
+
 
 namespace AddinTesting
 {
@@ -8,31 +18,26 @@ namespace AddinTesting
     /// </summary>
     public partial class MyAddinControl : UserControl
     {
+
+        private viewModel vm;
+
         #region Constructor
 
-        /// <summary>
-        /// Default constructor
-        /// </summary>
+
         public MyAddinControl()
         {
+
+            //El datacontext es el viewmodel, el viewmodel se comunica con todas las otras clases 
+            vm = new viewModel();
+            this.DataContext = vm;
+            DataContext = this;
+            vm.initVM();
             InitializeComponent();
+
         }
+
 
         #endregion
-
-        /// <summary>
-        /// When the button is clicked
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void Button_Click(object sender, System.Windows.RoutedEventArgs e)
-        {
-            // Get the number of selected objects
-            var count = 0;
-            Application.ActiveModel?.SelectedObjects(objects => count = objects?.Count ?? 0);
-
-            // Let the user know
-            Application.ShowMessageBox($"Looks like you have {count} objects selected");
-        }
+ 
     }
 }

@@ -43,3 +43,7 @@ E:\_DEV\SWMotionControl\AddinTesting\obj\Debug\AddinTesting.g.resources
 E:\_DEV\SWMotionControl\AddinTesting\obj\Debug\AddinTesting.csproj.CopyComplete
 E:\_DEV\SWMotionControl\AddinTesting\obj\Debug\AddinTesting.dll
 E:\_DEV\SWMotionControl\AddinTesting\obj\Debug\AddinTesting.pdb
+E:\_DEV\SWMotionControl\AddinTesting\bin\Debug\SharpDX.dll
+E:\_DEV\SWMotionControl\AddinTesting\bin\Debug\SharpDX.pdb
+E:\_DEV\SWMotionControl\AddinTesting\bin\Debug\SharpDX.XInput.dll
+E:\_DEV\SWMotionControl\AddinTesting\bin\Debug\SharpDX.XInput.pdb

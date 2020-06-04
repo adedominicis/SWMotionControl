@@ -41,6 +41,14 @@
             "AngelSix.SolidDna": {
               "target": "Package",
               "version": "[1.0.1.8, )"
+            },
+            "SharpDX": {
+              "target": "Package",
+              "version": "[4.2.0, )"
+            },
+            "SharpDX.XInput": {
+              "target": "Package",
+              "version": "[4.2.0, )"
             }
           }
         }
