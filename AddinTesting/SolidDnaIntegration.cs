@@ -139,7 +139,7 @@ namespace AddinTesting
         /// <summary>
         /// My Add-in title
         /// </summary>
-        public override string AddInTitle => "AddinTesting AddIn Title";
+        public override string AddInTitle => "XBOX ONE CONTROLLER PLUGIN";
 
         /// <summary>
         /// My Add-in description

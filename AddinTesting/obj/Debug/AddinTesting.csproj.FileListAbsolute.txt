@@ -34,7 +34,6 @@ E:\_DEV\SWMotionControl\AddinTesting\bin\Debug\SolidWorks.Interop.swdocumentmgr.
 E:\_DEV\SWMotionControl\AddinTesting\bin\Debug\SolidWorks.Interop.swmotionstudy.dll
 E:\_DEV\SWMotionControl\AddinTesting\bin\Debug\SolidWorks.Interop.swpublished.dll
 E:\_DEV\SWMotionControl\AddinTesting\bin\Debug\SolidWorks.Interop.SWRoutingLib.dll
-E:\_DEV\SWMotionControl\AddinTesting\obj\Debug\AddinTesting.csprojAssemblyReference.cache
 E:\_DEV\SWMotionControl\AddinTesting\obj\Debug\MyAddinControl.g.cs
 E:\_DEV\SWMotionControl\AddinTesting\obj\Debug\AddinTesting_MarkupCompile.cache
 E:\_DEV\SWMotionControl\AddinTesting\obj\Debug\AddinTesting_MarkupCompile.lref
@@ -47,3 +46,4 @@ E:\_DEV\SWMotionControl\AddinTesting\bin\Debug\SharpDX.dll
 E:\_DEV\SWMotionControl\AddinTesting\bin\Debug\SharpDX.pdb
 E:\_DEV\SWMotionControl\AddinTesting\bin\Debug\SharpDX.XInput.dll
 E:\_DEV\SWMotionControl\AddinTesting\bin\Debug\SharpDX.XInput.pdb
+E:\_DEV\SWMotionControl\AddinTesting\obj\Debug\AddinTesting.csprojAssemblyReference.cache

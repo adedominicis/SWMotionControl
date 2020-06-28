@@ -83,6 +83,8 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="model\MateManipulator.cs" />
+    <Compile Include="model\viewManipulator.cs" />
     <Compile Include="model\xBoxControllerCom.cs" />
     <Compile Include="MyAddinControl.xaml.cs">
       <DependentUpon>MyAddinControl.xaml</DependentUpon>

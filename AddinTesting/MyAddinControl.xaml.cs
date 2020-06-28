@@ -18,7 +18,7 @@ namespace AddinTesting
     /// </summary>
     public partial class MyAddinControl : UserControl
     {
-
+        //DATACONTEXT.
         private viewModel vm;
 
         #region Constructor
@@ -30,7 +30,6 @@ namespace AddinTesting
             //El datacontext es el viewmodel, el viewmodel se comunica con todas las otras clases 
             vm = new viewModel();
             this.DataContext = vm;
-            DataContext = this;
             vm.initVM();
             InitializeComponent();
 
