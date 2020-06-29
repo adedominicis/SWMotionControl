@@ -84,6 +84,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="model\MateManipulator.cs" />
+    <Compile Include="model\SelectionListener.cs" />
     <Compile Include="model\viewManipulator.cs" />
     <Compile Include="model\xBoxControllerCom.cs" />
     <Compile Include="MyAddinControl.xaml.cs">

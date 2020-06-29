@@ -11,6 +11,7 @@ namespace AddinTesting.model
         private DispatcherTimer timer;
         private Controller controller;
         
+        
 
         // Thumbstick percentage
         private decimal leftThumbX;
@@ -51,9 +52,10 @@ namespace AddinTesting.model
 
         #endregion
 
-        #region public
+        #region Public Properties and events.
 
-        public event EventHandler RaiseControllerUpdatedEvent;
+        public event EventHandler controllerUpdatedEvent;
+        public event EventHandler<bool> controllerPlugStateChanged;
 
         #endregion
 
@@ -113,28 +115,54 @@ namespace AddinTesting.model
             }
 
         }
-        
-        // Analog accelerations.
 
+        // Analog accelerations.
 
         #endregion
 
         #region Metodos
 
-        public void initXboxControllerComm()
+        public bool initXboxControllerComm()
         {
             controller = new Controller(UserIndex.One);
             if (controller.IsConnected)
             {
+                // Notificar a la aplicacion que el control está conectado.
+                controllerPlugStateChanged?.Invoke(this, true);
+                //Crear un timer y ajustar su paso.
                 timer = new DispatcherTimer();
                 timer.Interval = TimeSpan.FromMilliseconds(tickDelta);
+                //Suscribirse al evento "tick" del timer. Ocurre cada vez que se cumple un paso.
                 timer.Tick += timer_Tick;
+                //Arrancar el timer
                 timer.Start();
+                return true;
             }
             else
             {
-                MessageBox.Show("Conecta tu Gamepad!");
+                // Notificar a la aplicacion que el control está desconectado
+                controllerPlugStateChanged?.Invoke(this, false);
+                return false;
             }
+
+        }
+
+        internal void endXboxControllerComm()
+        {
+            if (controller.IsConnected)
+            {
+                //Desconectar control
+                timer.Stop();
+                //Desuscribirse del timer.
+                timer.Tick -= timer_Tick;
+                //Destruir objeto timer.
+                timer = null;
+                //Destruir objeto controller.
+                controller = null;
+                // Notificar a la aplicación que el control está desconectado
+                controllerPlugStateChanged?.Invoke(this, false);
+            }
+
 
         }
 
@@ -143,34 +171,44 @@ namespace AddinTesting.model
             updateAnalogs();
         }
 
-
         private void updateAnalogs()
         {
-            var state = controller.GetState();
-
-            // Guardar valores antes de la actualización --> reemplazar por aceleracion o alguna medida de la variacion
-
-            saveAnalogPositions();
-
-            // Thumbstick percentage
-            leftThumbX = Math.Round(100 - ((decimal)(tsRightLimit - state.Gamepad.LeftThumbX) / tsRightLimit) * 100);
-            leftThumbY = Math.Round(100 - ((decimal)(tsUpperLimit - state.Gamepad.LeftThumbY) / tsUpperLimit) * 100);
-            rightThumbX = Math.Round(100 - ((decimal)(tsRightLimit - state.Gamepad.RightThumbX) / tsRightLimit) * 100);
-            rightThumbY = Math.Round(100 - ((decimal)(tsUpperLimit - state.Gamepad.RightThumbY) / tsUpperLimit) * 100);
-
-            // Trigger percentage
-
-            rightTrigger = Math.Round(100 - ((decimal)(triggerLimit - state.Gamepad.RightTrigger) / triggerLimit) * 100);
-            leftTrigger = Math.Round(100 - ((decimal)(triggerLimit - state.Gamepad.LeftTrigger) / triggerLimit) * 100);
-
-            //Accelerations
-            setAnalogAccelerations();
-
-            //
-            if (true)
+            try
             {
-                RaiseControllerUpdatedEvent?.Invoke(this, null);
+                var state = controller.GetState();
+
+                // Guardar valores antes de la actualización --> reemplazar por aceleracion o alguna medida de la variacion
+
+                saveAnalogPositions();
+
+                // Thumbstick percentage
+                leftThumbX = Math.Round(100 - ((decimal)(tsRightLimit - state.Gamepad.LeftThumbX) / tsRightLimit) * 100);
+                leftThumbY = Math.Round(100 - ((decimal)(tsUpperLimit - state.Gamepad.LeftThumbY) / tsUpperLimit) * 100);
+                rightThumbX = Math.Round(100 - ((decimal)(tsRightLimit - state.Gamepad.RightThumbX) / tsRightLimit) * 100);
+                rightThumbY = Math.Round(100 - ((decimal)(tsUpperLimit - state.Gamepad.RightThumbY) / tsUpperLimit) * 100);
+
+                // Trigger percentage
+
+                rightTrigger = Math.Round(100 - ((decimal)(triggerLimit - state.Gamepad.RightTrigger) / triggerLimit) * 100);
+                leftTrigger = Math.Round(100 - ((decimal)(triggerLimit - state.Gamepad.LeftTrigger) / triggerLimit) * 100);
+
+                //Accelerations
+                setAnalogAccelerations();
+
+                //Ajustar esto en funcion de las aceleraciones. Por ahora entra directamente.
+                if (true)
+                {
+                    controllerUpdatedEvent?.Invoke(this, null);
+                }
             }
+            catch (Exception e)
+            {
+                MessageBox.Show(e.Message+" Señal del control se ha perdido o desconectado");
+                controllerPlugStateChanged?.Invoke(this,false);
+                endXboxControllerComm();
+            }
+
+            
 
         }
 

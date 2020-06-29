@@ -8,112 +8,148 @@
              d:DesignHeight="300" d:DesignWidth="300">
     <Grid Background="Linen">
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="2*"/>
+            <ColumnDefinition Width="120"/>
             <ColumnDefinition Width="*"/>
-          
+            <ColumnDefinition Width="*"/>
+
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="30"/>
-            <RowDefinition Height="30"/>
-            <RowDefinition Height="30"/>
-            <RowDefinition Height="30"/>
-            <RowDefinition Height="30"/>
-            <RowDefinition Height="30"/>
-            <RowDefinition Height="30"/>
-            <RowDefinition Height="30"/>
-            <RowDefinition Height="30"/>
+            <RowDefinition Height="22"/>
+            <RowDefinition Height="22"/>
+            <RowDefinition Height="22"/>
+            <RowDefinition Height="22"/>
+            <RowDefinition Height="22"/>
+            <RowDefinition Height="22"/>
+            <RowDefinition Height="22"/>
+            <RowDefinition Height="22"/>
+            <RowDefinition Height="22"/>
+            <RowDefinition Height="22"/>
+            <RowDefinition Height="22"/>
+            <RowDefinition Height="22"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
+
+        <Button Grid.Row="10" Grid.Column="1"
+                Content="CONECTAR"
+                FontSize="10" 
+                FontWeight="Bold" Click="btControlConnect_Click"
+                Name="btControlConnect"
+                Background="LightGreen"
+                Margin=" 2 2 2 2 "/>
+
+        <Button Grid.Row="10" Grid.Column="2"
+                Content="DESCONECTAR"
+                FontSize="10" 
+                FontWeight="Bold" Click="btControlDisconnect_Click"
+                Name="btControlDisconnect"
+                Background="IndianRed"
+                Margin=" 2 2 2 2 "
+                IsEnabled="False"/>
+
         <Label Grid.Row="0" Grid.Column="0"
                VerticalAlignment="Center"
-               HorizontalAlignment="Center"
-               FontSize="12"
+               HorizontalAlignment="Left"
+               FontSize="9"
                FontWeight="Bold" Content="Thumbstick Izquierdo X"/>
         <Label Grid.Row="1" Grid.Column="0"
                VerticalAlignment="Center"
-               HorizontalAlignment="Center"
-               FontSize="12"
+               HorizontalAlignment="Left"
+               FontSize="9"
                FontWeight="Bold" Content="Thumbstick Izquierdo Y"/>
         <Label Grid.Row="2" Grid.Column="0"
                VerticalAlignment="Center"
-               HorizontalAlignment="Center"
-               FontSize="12"
+               HorizontalAlignment="Left"
+               FontSize="9"
                FontWeight="Bold" Content="Thumbstick Derecho X"/>
-        
+
         <Label Grid.Row="3" Grid.Column="0"
                VerticalAlignment="Center"
-               HorizontalAlignment="Center"
-               FontSize="12"
+               HorizontalAlignment="Left"
+               FontSize="9"
                FontWeight="Bold" Content="Thumbstick Derecho Y"/>
 
         <Label Grid.Row="4" Grid.Column="0"
                VerticalAlignment="Center"
-               HorizontalAlignment="Center"
-               FontSize="12"
+               HorizontalAlignment="Left"
+               FontSize="9"
                FontWeight="Bold" Content="Left Trigger"/>
 
         <Label Grid.Row="5" Grid.Column="0"
                VerticalAlignment="Center"
-               HorizontalAlignment="Center"
-               FontSize="12"
+               HorizontalAlignment="Left"
+               FontSize="9"
                FontWeight="Bold" Content="Right Trigger"/>
-
+        
         <Label Grid.Row="6" Grid.Column="0"
                VerticalAlignment="Center"
-               HorizontalAlignment="Center"
-               FontSize="12"
+               HorizontalAlignment="Left"
+               FontSize="9"
                FontWeight="Bold">BUTTONS</Label>
+
+        <Label Grid.Row="7" Grid.Column="0"
+               VerticalAlignment="Center"
+               HorizontalAlignment="Left"
+               FontSize="9"
+               FontWeight="Bold" Content="Mate Name:"/>
+
+        <Label Grid.Row="10" Grid.Column="0"
+               VerticalAlignment="Center"
+               HorizontalAlignment="Left"
+               FontSize="9"
+               FontWeight="Bold" Content="Control de XBOX ONE:"/>
 
         <TextBox Grid.Row="0" Grid.Column="1"
                Text="{Binding LeftThumbXAxis, UpdateSourceTrigger=PropertyChanged,Mode=OneWay}"
                VerticalAlignment="Center"
                HorizontalAlignment="Center"
-               FontSize="24"
+               FontSize="16"
                FontWeight="Bold"/>
         <TextBox Grid.Row="1" Grid.Column="1"
                Text="{Binding LeftThumbYAxis, UpdateSourceTrigger=PropertyChanged,Mode=OneWay}"
                VerticalAlignment="Center"
                HorizontalAlignment="Center"
-               FontSize="24"
+               FontSize="16"
                FontWeight="Bold"/>
         <TextBox Grid.Row="2" Grid.Column="1"
                Text="{Binding RightThumbXAxis, UpdateSourceTrigger=PropertyChanged,Mode=OneWay}"
                VerticalAlignment="Center"
                HorizontalAlignment="Center"
-               FontSize="24"
+               FontSize="16"
                FontWeight="Bold"/>
         <TextBox Grid.Row="3" Grid.Column="1"
                Text="{Binding RightThumbYAxis, UpdateSourceTrigger=PropertyChanged,Mode=OneWay}"
                VerticalAlignment="Center"
                HorizontalAlignment="Center"
-               FontSize="24"
+               FontSize="16"
                FontWeight="Bold"/>
 
         <TextBox Grid.Row="4" Grid.Column="1"
                Text="{Binding LeftTrigger, UpdateSourceTrigger=PropertyChanged,Mode=OneWay}"
                VerticalAlignment="Center"
                HorizontalAlignment="Center"
-               FontSize="24"
+               FontSize="16"
                FontWeight="Bold"/>
         <TextBox Grid.Row="5" Grid.Column="1"
                Text="{Binding RightTrigger, UpdateSourceTrigger=PropertyChanged,Mode=OneWay}"
                VerticalAlignment="Center"
                HorizontalAlignment="Center"
-               FontSize="24"
+               FontSize="16"
                FontWeight="Bold"/>
 
         <TextBox Grid.Row="6" Grid.Column="1"
                Text="{Binding Buttons, UpdateSourceTrigger=PropertyChanged,Mode=OneWay}"
                VerticalAlignment="Center"
                HorizontalAlignment="Center"
-               FontSize="12"
+               FontSize="9"
                FontWeight="Bold"/>
-        <TextBox Grid.Row="7" Grid.Column="1"
+        <TextBox Grid.Row="7" Grid.Column="1" Grid.ColumnSpan="2"
                Text="{Binding MateName, UpdateSourceTrigger=PropertyChanged,Mode=OneWay}"
                VerticalAlignment="Center"
-               HorizontalAlignment="Center"
-               FontSize="12"
-               FontWeight="Bold"/>
+               HorizontalAlignment="Stretch"
+               FontSize="9"
+               Margin="2"
+               FontWeight="Bold" GotFocus="MateNameGotFocus"/>
+        
     </Grid>
 </UserControl>
