@@ -20,7 +20,7 @@ namespace AddinTesting
     {
         //DATACONTEXT.
         private viewModel vm;
-        
+
 
         #region Constructor
 
@@ -33,45 +33,31 @@ namespace AddinTesting
             this.DataContext = vm;
             vm.initVM();
             InitializeComponent();
-            vm.xBoxComm.controllerPlugStateChanged += XBoxComm_controllerPlugStateChanged;
-
-
         }
 
         #endregion
 
-        #region Listeners
-        private void XBoxComm_controllerPlugStateChanged(object sender, bool status)
-        {
-            if (status)
-            {
-                MessageBox.Show("Mando XBOX ONE conectado!");
-            }
-            else
-            {
-                MessageBox.Show("Mando XBOX ONE desconectado!");
-            }
-            btControlDisconnect.IsEnabled = status;
-        }
-
-        //Conectar el control
-        private void btControlConnect_Click(object sender, RoutedEventArgs e)
-        {
-            vm.ConnectController();
-        }
-
-        //Desconectar el control
         private void btControlDisconnect_Click(object sender, RoutedEventArgs e)
         {
-            vm.DisconnectController();
+            if (vm.DisconnectController())
+            {
+                flipButtons();
+            }
+
         }
 
-        //Caja mate ha sido seleccionada, un listener de seleccion en SW debe activarse.
-
-        private void MateNameGotFocus(object sender, RoutedEventArgs e)
+        private void btControlConnect_Click(object sender, RoutedEventArgs e)
         {
-            vm.listenForMateSelection(true);
+            if (vm.ConnectController())
+            {
+                flipButtons();
+            }
         }
-        #endregion
+
+        private void flipButtons()
+        {
+            btControlConnect.IsEnabled = !btControlConnect.IsEnabled;
+            btControlDisconnect.IsEnabled = !btControlDisconnect.IsEnabled;
+        }
     }
 }

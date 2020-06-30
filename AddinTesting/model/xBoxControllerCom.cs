@@ -7,40 +7,40 @@ namespace AddinTesting.model
 {
     public class xBoxControllerCom
     {
+        /// <summary>
+        /// Expone posiciones y velocidades analogas del control XBOX ONE. Los datos salen en valores decimal de -100 a 100.
+        /// Contiene evento "controllerUpdateEvent" para notificar que alguno de los botones o analogos ha sido accionado
+        /// Contiene evento "controllerPlugStateChanged" para notificar que el control fue desconectado o conectado.
+        /// </summary>
+        
         #region private Fields
         private DispatcherTimer timer;
         private Controller controller;
-        
-        
 
-        // Thumbstick percentage
+        // Analog positions
         private decimal leftThumbX;
         private decimal leftThumbY;
         private decimal rightThumbX;
         private decimal rightThumbY;
+        decimal rightTrigger;
+        decimal leftTrigger;
 
+        // Analog speeds
 
-
-        // Thumbstick percentage
+        private decimal spdLeftThumbX;
+        private decimal spdLeftThumbY;
+        private decimal spdRightThumbX;
+        private decimal spdRightThumbY;
+        private decimal spdLeftTrigger;
+        private decimal spdRightTrigger;
         private decimal oldLeftThumbX;
-        private decimal accLeftThumbX;
-        private decimal accLeftThumbY;
-        private decimal accRightThumbX;
-        private decimal accRightThumbY;
-        private decimal accLeftTrigger;
-        private decimal accRightTrigger;
         private decimal oldLeftThumbY;
         private decimal oldRightThumbX;
         private decimal oldRightThumbY;
         private decimal oldLeftTrigger;
         private decimal oldRightTrigger;
 
-        //Trigger percentage
-        decimal rightTrigger;
-        decimal leftTrigger;
-
-
-        // Thumbstick + limits. - Limits are symmetrical
+        // Thumbstick position limits. - Limits are symmetrical
         private const int tsRightLimit = 32767;
         private const int tsUpperLimit = 32767;
         private const int triggerLimit = 255;
@@ -61,62 +61,82 @@ namespace AddinTesting.model
 
         #region Properties
 
-        // Analog percent coordinates.
-        public string LeftThumbX
+        // Analog positions
+        public decimal LeftThumbX
         {
             get
             {
-                return leftThumbX.ToString();
+                return leftThumbX;
+            }
+
+        }
+        public decimal LeftThumbY
+        {
+            get
+            {
+                return leftThumbY;
+            }
+
+        }
+        public decimal RightThumbX
+        {
+            get
+            {
+                return rightThumbX;
+            }
+
+        }
+        public decimal RightThumbY
+        {
+            get
+            {
+                return rightThumbY;
+            }
+
+        }
+        public decimal RightTrigger
+        {
+            get
+            {
+                return rightTrigger;
+            }
+
+        }
+        public decimal LeftTrigger
+        {
+            get
+            {
+                return leftTrigger;
             }
 
         }
 
-        public string LeftThumbY
+        //Analog speed
+
+        public decimal SpdLeftThumbX
         {
-            get
-            {
-                return leftThumbY.ToString();
-            }
-
+            get { return spdLeftThumbX; }
         }
-
-        public string RightThumbX
+        public decimal SpdLeftThumbY
         {
-            get
-            {
-                return rightThumbX.ToString();
-            }
-
+            get { return spdLeftThumbY; }
         }
-
-        public string RightThumbY
+        public decimal SpdRightThumbX
         {
-            get
-            {
-                return rightThumbY.ToString();
-            }
-
+            get { return spdRightThumbX; }
         }
-
-        public string RightTrigger
+        public decimal SpdRightThumbY
         {
-            get
-            {
-                return rightTrigger.ToString();
-            }
-
+            get { return spdRightThumbY; }
         }
-
-        public string LeftTrigger
+        public decimal SpdLeftTrigger
         {
-            get
-            {
-                return leftTrigger.ToString();
-            }
-
+            get { return spdLeftTrigger; }
         }
-
-        // Analog accelerations.
+        public decimal SpdRightTrigger
+        {
+            get { return spdRightTrigger; }
+        }
 
         #endregion
 
@@ -192,10 +212,10 @@ namespace AddinTesting.model
                 rightTrigger = Math.Round(100 - ((decimal)(triggerLimit - state.Gamepad.RightTrigger) / triggerLimit) * 100);
                 leftTrigger = Math.Round(100 - ((decimal)(triggerLimit - state.Gamepad.LeftTrigger) / triggerLimit) * 100);
 
-                //Accelerations
-                setAnalogAccelerations();
+                //speed
+                setAnalogspeed();
 
-                //Ajustar esto en funcion de las aceleraciones. Por ahora entra directamente.
+                //Ajustar esto en funcion de las velocidades. Por ahora entra directamente.
                 if (true)
                 {
                     controllerUpdatedEvent?.Invoke(this, null);
@@ -212,15 +232,14 @@ namespace AddinTesting.model
 
         }
 
-        private void setAnalogAccelerations()
+        private void setAnalogspeed()
         {
-            accLeftThumbX=(decimal)((oldLeftThumbX-leftThumbX)/ tickDelta);
-            accLeftThumbY= (decimal)((oldLeftThumbY-leftThumbY)/tickDelta);
-            accRightThumbX = (decimal)((oldRightThumbX - rightThumbX) / tickDelta);
-            accRightThumbY=(decimal)((oldRightThumbY - rightThumbY) / tickDelta);
-
-            accLeftTrigger = (decimal)((oldLeftTrigger - leftTrigger) / tickDelta);
-            accRightTrigger = (decimal)((oldRightTrigger - rightTrigger) / tickDelta);
+            spdLeftThumbX=(decimal)((oldLeftThumbX-leftThumbX)/ tickDelta);
+            spdLeftThumbY= (decimal)((oldLeftThumbY-leftThumbY)/tickDelta);
+            spdRightThumbX = (decimal)((oldRightThumbX - rightThumbX) / tickDelta);
+            spdRightThumbY=(decimal)((oldRightThumbY - rightThumbY) / tickDelta);
+            spdLeftTrigger = (decimal)((oldLeftTrigger - leftTrigger) / tickDelta);
+            spdRightTrigger = (decimal)((oldRightTrigger - rightTrigger) / tickDelta);
 
         }
 

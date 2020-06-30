@@ -11,28 +11,22 @@ namespace AddinTesting.ViewModel
 
     public class viewModel : INotifyPropertyChanged
     {
-        
+
         #region private fields
-        private string mateName;
-
-        viewManipulator viewMan;
-        SldWorks swApp;
-        ModelDoc2 swModel;
-        SelectionListener sl;
-
-
+        private SldWorks swApp;
+        private viewModelData vmData=new viewModelData();
+        private AppControl miApp;
+        
         #endregion
 
-        #region Properties y eventos publicos.
-
-        public xBoxControllerCom xBoxComm = new xBoxControllerCom();
+        #region UI Bound properties.
 
         // Eje horizontal del joy izquierdo
         public string LeftThumbXAxis
-{
+        {
             get
             {
-                return (xBoxComm.LeftThumbX).ToString();
+                return vmData.LeftThumbX.ToString();
             }
 
         }
@@ -41,7 +35,7 @@ namespace AddinTesting.ViewModel
         {
             get
             {
-                return (xBoxComm.LeftThumbY).ToString();
+                return vmData.LeftThumbY.ToString();
             }
 
         }
@@ -50,27 +44,25 @@ namespace AddinTesting.ViewModel
         {
             get
             {
-                return (xBoxComm.RightThumbX).ToString();
+                return vmData.RightThumbX.ToString();
             }
 
         }
-
         //Eje vertical del joy derecho
         public string RightThumbYAxis
         {
             get
             {
-                return (xBoxComm.RightThumbY).ToString();
+                return vmData.RightThumbY.ToString();
             }
 
         }
-
         //Trigger derecho
         public string RightTrigger
         {
             get
             {
-                return (xBoxComm.RightTrigger).ToString();
+                return vmData.RightTrigger.ToString();
             }
 
         }
@@ -79,141 +71,67 @@ namespace AddinTesting.ViewModel
         {
             get
             {
-                return (xBoxComm.LeftTrigger).ToString();
+                return vmData.LeftTrigger.ToString();
             }
 
-        }
-
-        // Casilla de seleccion de un mate.
-        public string MateName
-        {
-            get { return mateName; }
-            set { mateName = value; }
         }
 
         #endregion
 
-        #region Metodos de inicializacion
+        #region Inicializar
 
         public void initVM()
         {
-            
+
             try
             {
-                // Obtener Instancia de solidworks
+                // Obtener Instancia activa de solidworks
                 swApp = (SldWorks)System.Runtime.InteropServices.Marshal.GetActiveObject("SldWorks.Application");
-                //Suscribirse al evento de cambio de documento, documento nuevo y cambio de documento.
-                swApp.ActiveDocChangeNotify += SwApp_ActiveDocChangeNotify;
-                swApp.FileOpenNotify += SwApp_FileOpenNotify;
-                swApp.FileNewNotify2 += SwApp_FileNewNotify2;
-            }
-            catch (Exception e)
-            {
-                MessageBox.Show(e.Message);
-            }
-            
-            //Modelo abierto en pantalla, en la instancia de solidworks.
-        }
-
-        private void documentSwapHandler()
-        {
-            try
-            {
-                if ((ModelDoc2)swApp.ActiveDoc != null)
-                {
-                    swModel = (ModelDoc2)swApp.ActiveDoc;
-                    //Iniciar selection listener.
-                    sl = new SelectionListener(swModel);
-                }
-                else
-                {
-                    MessageBox.Show("Abra un documento");
-                    sl = null;
-                }
+                // Generar instancia de app control
+                miApp = new AppControl(swApp, this);
+                //Suscribirse a eventos de miapp.
+                miApp.appControlUiRefresh += MiApp_appControlUiRefresh;
             }
             catch (Exception e)
             {
                 MessageBox.Show(e.Message);
             }
         }
-        // Handlers de cambio de documento de solidworks. Todos redireccionan a Document Swap Handler
-        private int SwApp_FileNewNotify2(object NewDoc, int DocType, string TemplateName)
+
+        #endregion
+
+        #region Metodos de transferencia desde la UI
+
+        /// <summary>
+        /// Commands de la UI
+        /// </summary>
+
+        public bool ConnectController()
         {
-            documentSwapHandler();
-            return 0;
-        }
-        private int SwApp_FileOpenNotify(string FileName)
-        {
-            documentSwapHandler();
-            return 0;
-        }
-        private int SwApp_ActiveDocChangeNotify()
-        {
-            documentSwapHandler();
-            return 0;
+            return miApp.ConnectController();
         }
 
-        // Conectar mando de xbox
-        internal bool ConnectController()
+        public bool DisconnectController()
         {
-
-            try
-            {
-                //Instanciar e iniciar controlador del mando
-                if (xBoxComm.initXboxControllerComm())
-                {
-                    // Suscribirse al evento del control. Este evento se dispara cada vez que el usuario usa los elementos del mando.
-                    xBoxComm.controllerUpdatedEvent += controllerUpdatedEventHandler;
-                    return true;
-                }
-                else
-                {
-                    return false;
-                }
-
-            }
-            catch (Exception e)
-            {
-                MessageBox.Show(e.Message);
-                return false;
-            }
-
+            return miApp.DisconnectController();
         }
 
-        // Desconectar mando de xbox
-        internal void DisconnectController()
-        {
-            try
-            {
-                if (xBoxComm!=null)
-                {
-                    //Desuscribirse del evento controllerupdate
-                    xBoxComm.controllerUpdatedEvent -= controllerUpdatedEventHandler;
-                    //Finalizar conexion con el control
-                    xBoxComm.endXboxControllerComm();
-                }
-
-            }
-            catch (Exception e)
-            {
-                MessageBox.Show(e.Message);
-            }
-        }
         #endregion
 
         #region Listeners
 
         //Cuando hay foco en la casilla de mate selection, hay que estar pendientes de capturar selecciones
-        internal void listenForMateSelection(bool listen)
-        {
-            if (listen)
-            {
-                
-            }
-        }
 
-        private void controllerUpdatedEventHandler(object sender, EventArgs e)
+
+        /// <summary>
+        /// Cuando se requiere un refresh de la UI desde miApp, este handler responde al disparo del evento 
+        /// AppControl.appControlUiRefresh
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="vmdata"></param>
+        private void MiApp_appControlUiRefresh(object sender, viewModelData vmdata)
         {
+            vmData = (viewModelData)vmdata;
             OnPropertyChanged("LeftThumbXAxis");
             OnPropertyChanged("LeftThumbYAxis");
             OnPropertyChanged("RightThumbXAxis");
@@ -221,6 +139,7 @@ namespace AddinTesting.ViewModel
             OnPropertyChanged("RightTrigger");
             OnPropertyChanged("LeftTrigger");
         }
+
 
         #endregion
 

@@ -33,7 +33,8 @@
         <Button Grid.Row="10" Grid.Column="1"
                 Content="CONECTAR"
                 FontSize="10" 
-                FontWeight="Bold" Click="btControlConnect_Click"
+                FontWeight="Bold"
+                Click="btControlConnect_Click"
                 Name="btControlConnect"
                 Background="LightGreen"
                 Margin=" 2 2 2 2 "/>
@@ -41,7 +42,8 @@
         <Button Grid.Row="10" Grid.Column="2"
                 Content="DESCONECTAR"
                 FontSize="10" 
-                FontWeight="Bold" Click="btControlDisconnect_Click"
+                FontWeight="Bold"
+                Click="btControlDisconnect_Click"
                 Name="btControlDisconnect"
                 Background="IndianRed"
                 Margin=" 2 2 2 2 "
@@ -149,7 +151,7 @@
                HorizontalAlignment="Stretch"
                FontSize="9"
                Margin="2"
-               FontWeight="Bold" GotFocus="MateNameGotFocus"/>
+               FontWeight="Bold"/>
         
     </Grid>
 </UserControl>
