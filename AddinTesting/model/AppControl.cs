@@ -30,7 +30,6 @@ namespace AddinTesting.model
 
         #region Private Fields
         private SldWorks swApp;
-        private ModelDoc2 swModel;
         private MateManipulator mateM;
         private SelectionListener selListener;
         private xBoxControllerCom xBoxConInstance;
@@ -44,7 +43,10 @@ namespace AddinTesting.model
         {
             get { return selListener; }
         }
-
+        public xBoxControllerCom XBoxConInstance
+        {
+            get { return xBoxConInstance; }
+        }
 
         #endregion
 

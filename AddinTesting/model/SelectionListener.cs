@@ -66,6 +66,11 @@ namespace AddinTesting.model
         /// </summary>
         private void subscribeToSWChangeDocEvents()
         {
+            //Desuscribir primero:
+            swApp.ActiveDocChangeNotify -= SwApp_ActiveDocChangeNotify;
+            swApp.FileOpenNotify -= SwApp_FileOpenNotify;
+            swApp.FileNewNotify2 -= SwApp_FileNewNotify2;
+            //Suscribir en limpio
             swApp.ActiveDocChangeNotify += SwApp_ActiveDocChangeNotify;
             swApp.FileOpenNotify += SwApp_FileOpenNotify;
             swApp.FileNewNotify2 += SwApp_FileNewNotify2;
@@ -94,18 +99,20 @@ namespace AddinTesting.model
         public void updateSwDoc()
         {
             //Crear objetos swDoc
-            if (swModel.GetType() == (int)swDocumentTypes_e.swDocPART)
+            if (SwModel.GetType() == (int)swDocumentTypes_e.swDocPART)
             {
-                swPart = (PartDoc)swModel;
+                swPart = (PartDoc)SwModel;
             }
-            else if (swModel.GetType() == (int)swDocumentTypes_e.swDocASSEMBLY)
+            else if (SwModel.GetType() == (int)swDocumentTypes_e.swDocASSEMBLY)
             {
-                swAssy = (AssemblyDoc)swModel;
+                swAssy = (AssemblyDoc)SwModel;
             }
-            else if (swModel.GetType() == (int)swDocumentTypes_e.swDocDRAWING)
+            else if (SwModel.GetType() == (int)swDocumentTypes_e.swDocDRAWING)
             {
-                swDraw = (DrawingDoc)swModel;
+                swDraw = (DrawingDoc)SwModel;
             }
+
+            subToSelectionListeners();
         }
         #endregion
 
@@ -118,18 +125,28 @@ namespace AddinTesting.model
             if (swPart != null)
             {
                 //Eventos de seleccion en partes
+                swPart.UserSelectionPostNotify -= SwPart_UserSelectionPostNotify;
                 swPart.UserSelectionPostNotify += SwPart_UserSelectionPostNotify;
             }
             if (swAssy != null)
             {
                 //Eventos de seleccion en ensamblajes
+                swAssy.UserSelectionPostNotify -= SwAssy_UserSelectionPostNotify;
                 swAssy.UserSelectionPostNotify += SwAssy_UserSelectionPostNotify;
+
             }
             if (swDraw != null)
             {
                 //Eventos de seleccion en dibujos
+                swDraw.UserSelectionPostNotify -= SwDraw_UserSelectionPostNotify;
                 swDraw.UserSelectionPostNotify += SwDraw_UserSelectionPostNotify;
             }
+        }
+
+        private int SwAssy_NewSelectionNotify()
+        {
+            MessageBox.Show("Algo fue seleccionado!");
+            return 0;
         }
 
 
@@ -144,14 +161,13 @@ namespace AddinTesting.model
             try
             {
                 //Tomar selectionManager.
-                selMgr = (SelectionMgr)swModel.SelectionManager;
+                selMgr = (SelectionMgr)SwModel.SelectionManager;
                 //Obtener el feature de lo que fue seleccionado
                 swFeat = (Feature)selMgr.GetSelectedObject6(1, -1);
                 if (swFeat!=null)
                 {
                     //Disparar evento.
                     userSelectedFeature?.Invoke(this, swFeat);
-                    MessageBox.Show("User selected a Feature!");
                 }
                 return 0;
             }

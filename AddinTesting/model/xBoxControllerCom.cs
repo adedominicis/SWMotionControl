@@ -16,14 +16,17 @@ namespace AddinTesting.model
         #region private Fields
         private DispatcherTimer timer;
         private Controller controller;
+        private bool plugStatus;
 
         // Analog positions
         private decimal leftThumbX;
         private decimal leftThumbY;
         private decimal rightThumbX;
         private decimal rightThumbY;
-        decimal rightTrigger;
-        decimal leftTrigger;
+        private decimal rightTrigger;
+        private decimal leftTrigger;
+        
+        
 
         // Analog speeds
 
@@ -43,10 +46,12 @@ namespace AddinTesting.model
         // Thumbstick position limits. - Limits are symmetrical
         private const int tsRightLimit = 32767;
         private const int tsUpperLimit = 32767;
-        private const int triggerLimit = 255;
+        private const int triggerLimit = 255; 
+        //General deadzone
+        private const int deadZone=10;
 
         //Timing constant
-        private const int tickDelta = 20;
+        private const int tickDelta = 100;
 
 
 
@@ -138,6 +143,20 @@ namespace AddinTesting.model
             get { return spdRightTrigger; }
         }
 
+
+        public bool PlugStatus
+        {
+            get { return plugStatus; }
+            set { plugStatus = value; }
+        }
+
+        //Delta T expuesto.
+        public int tickDeltaMilliSec
+        {
+            get { return tickDelta; }
+        }
+
+
         #endregion
 
         #region Metodos
@@ -156,14 +175,15 @@ namespace AddinTesting.model
                 timer.Tick += timer_Tick;
                 //Arrancar el timer
                 timer.Start();
-                return true;
+                plugStatus = true;
             }
             else
             {
                 // Notificar a la aplicacion que el control está desconectado
                 controllerPlugStateChanged?.Invoke(this, false);
-                return false;
+                plugStatus = false;
             }
+            return plugStatus;
 
         }
 
@@ -181,6 +201,8 @@ namespace AddinTesting.model
                 controller = null;
                 // Notificar a la aplicación que el control está desconectado
                 controllerPlugStateChanged?.Invoke(this, false);
+                //Setear estado de conexión
+                plugStatus = false;
             }
 
 
@@ -212,11 +234,30 @@ namespace AddinTesting.model
                 rightTrigger = Math.Round(100 - ((decimal)(triggerLimit - state.Gamepad.RightTrigger) / triggerLimit) * 100);
                 leftTrigger = Math.Round(100 - ((decimal)(triggerLimit - state.Gamepad.LeftTrigger) / triggerLimit) * 100);
 
+                bool deadZoneTrigger = false;
+                //Deadzone correction:
+                if (Math.Abs(leftThumbX)<deadZone)
+                {
+                    leftThumbX = 0;
+                }
+                if (Math.Abs(leftThumbY) < deadZone)
+                {
+                    leftThumbY = 0;
+                }
+                if (Math.Abs(rightThumbX) <deadZone)
+                {
+                    rightThumbX = 0;
+                }
+                if (Math.Abs(rightThumbY) < deadZone)
+                {
+                    rightThumbY = 0;
+                }
+
                 //speed
                 setAnalogspeed();
 
-                //Ajustar esto en funcion de las velocidades. Por ahora entra directamente.
-                if (true)
+                //Si los movimientos son mayores al deadzone, emitir movimiento.
+                if (!deadZoneTrigger)
                 {
                     controllerUpdatedEvent?.Invoke(this, null);
                 }

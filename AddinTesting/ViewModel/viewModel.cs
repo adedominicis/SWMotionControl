@@ -90,11 +90,12 @@ namespace AddinTesting.ViewModel
                 // Generar instancia de app control
                 miApp = new AppControl(swApp, this);
                 //Suscribirse a eventos de miapp.
+                miApp.appControlUiRefresh -= MiApp_appControlUiRefresh;
                 miApp.appControlUiRefresh += MiApp_appControlUiRefresh;
             }
             catch (Exception e)
             {
-                MessageBox.Show(e.Message);
+                MessageBox.Show("Error en inicializacion de viewModel: "+e.Message);
             }
         }
 
@@ -121,7 +122,6 @@ namespace AddinTesting.ViewModel
         #region Listeners
 
         //Cuando hay foco en la casilla de mate selection, hay que estar pendientes de capturar selecciones
-
 
         /// <summary>
         /// Cuando se requiere un refresh de la UI desde miApp, este handler responde al disparo del evento 
