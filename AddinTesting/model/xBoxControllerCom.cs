@@ -12,7 +12,7 @@ namespace AddinTesting.model
         /// Contiene evento "controllerUpdateEvent" para notificar que alguno de los botones o analogos ha sido accionado
         /// Contiene evento "controllerPlugStateChanged" para notificar que el control fue desconectado o conectado.
         /// </summary>
-        
+
         #region private Fields
         private DispatcherTimer timer;
         private Controller controller;
@@ -25,8 +25,8 @@ namespace AddinTesting.model
         private decimal rightThumbY;
         private decimal rightTrigger;
         private decimal leftTrigger;
-        
-        
+
+
 
         // Analog speeds
 
@@ -46,9 +46,9 @@ namespace AddinTesting.model
         // Thumbstick position limits. - Limits are symmetrical
         private const int tsRightLimit = 32767;
         private const int tsUpperLimit = 32767;
-        private const int triggerLimit = 255; 
+        private const int triggerLimit = 255;
         //General deadzone
-        private const int deadZone=10;
+        private const int deadZone = 10;
 
         //Timing constant
         private const int tickDelta = 100;
@@ -180,6 +180,7 @@ namespace AddinTesting.model
             else
             {
                 // Notificar a la aplicacion que el control está desconectado
+                endXboxControllerComm();
                 controllerPlugStateChanged?.Invoke(this, false);
                 plugStatus = false;
             }
@@ -189,22 +190,19 @@ namespace AddinTesting.model
 
         internal void endXboxControllerComm()
         {
-            if (controller.IsConnected)
-            {
-                //Desconectar control
-                timer.Stop();
-                //Desuscribirse del timer.
-                timer.Tick -= timer_Tick;
-                //Destruir objeto timer.
-                timer = null;
-                //Destruir objeto controller.
-                controller = null;
-                // Notificar a la aplicación que el control está desconectado
-                controllerPlugStateChanged?.Invoke(this, false);
-                //Setear estado de conexión
-                plugStatus = false;
-            }
 
+            //Desconectar control
+            timer.Stop();
+            //Desuscribirse del timer.
+            timer.Tick -= timer_Tick;
+            //Destruir objeto timer.
+            timer = null;
+            //Destruir objeto controller.
+            controller = null;
+            // Notificar a la aplicación que el control está desconectado
+            controllerPlugStateChanged?.Invoke(this, false);
+            //Setear estado de conexión
+            plugStatus = false;
 
         }
 
@@ -236,7 +234,7 @@ namespace AddinTesting.model
 
                 bool deadZoneTrigger = false;
                 //Deadzone correction:
-                if (Math.Abs(leftThumbX)<deadZone)
+                if (Math.Abs(leftThumbX) < deadZone)
                 {
                     leftThumbX = 0;
                 }
@@ -244,7 +242,7 @@ namespace AddinTesting.model
                 {
                     leftThumbY = 0;
                 }
-                if (Math.Abs(rightThumbX) <deadZone)
+                if (Math.Abs(rightThumbX) < deadZone)
                 {
                     rightThumbX = 0;
                 }
@@ -264,21 +262,21 @@ namespace AddinTesting.model
             }
             catch (Exception e)
             {
-                MessageBox.Show(e.Message+" Señal del control se ha perdido o desconectado");
-                controllerPlugStateChanged?.Invoke(this,false);
+                MessageBox.Show(e.Message + " Señal del control se ha perdido o desconectado");
+                controllerPlugStateChanged?.Invoke(this, false);
                 endXboxControllerComm();
             }
 
-            
+
 
         }
 
         private void setAnalogspeed()
         {
-            spdLeftThumbX=(decimal)((oldLeftThumbX-leftThumbX)/ tickDelta);
-            spdLeftThumbY= (decimal)((oldLeftThumbY-leftThumbY)/tickDelta);
+            spdLeftThumbX = (decimal)((oldLeftThumbX - leftThumbX) / tickDelta);
+            spdLeftThumbY = (decimal)((oldLeftThumbY - leftThumbY) / tickDelta);
             spdRightThumbX = (decimal)((oldRightThumbX - rightThumbX) / tickDelta);
-            spdRightThumbY=(decimal)((oldRightThumbY - rightThumbY) / tickDelta);
+            spdRightThumbY = (decimal)((oldRightThumbY - rightThumbY) / tickDelta);
             spdLeftTrigger = (decimal)((oldLeftTrigger - leftTrigger) / tickDelta);
             spdRightTrigger = (decimal)((oldRightTrigger - rightTrigger) / tickDelta);
 
@@ -286,9 +284,9 @@ namespace AddinTesting.model
 
         private bool analogsMoved()
         {
-            //El criterio acá debería ser de aceleracion
+            //Si algun analog se movió
             return oldLeftThumbX != leftThumbX ||
-                oldLeftThumbY != leftThumbY || 
+                oldLeftThumbY != leftThumbY ||
                 oldRightThumbX != rightThumbX ||
                 oldRightThumbY != rightThumbY ||
                 oldLeftTrigger != leftTrigger ||
