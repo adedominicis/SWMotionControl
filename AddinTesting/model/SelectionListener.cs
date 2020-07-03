@@ -173,7 +173,7 @@ namespace AddinTesting.model
             }
             catch (Exception e)
             {
-                MessageBox.Show("Error disparando userSelectedFeature en  SwAssy_UserSelectionPostNotify: " + e.Message);
+                //MessageBox.Show("Error disparando userSelectedFeature en  SwAssy_UserSelectionPostNotify: " + e.Message);
             }
             return 0;
         }

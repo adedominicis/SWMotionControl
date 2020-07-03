@@ -30,39 +30,55 @@ namespace AddinTesting.model
 
         #region Private Fields
         private SldWorks swApp;
-        private MateManipulator mateM;
+        private KinematicManipulator kineM;
         private SelectionListener selListener;
         private xBoxControllerCom xBoxConInstance;
-        private viewModelData vmData=new viewModelData();
+        viewModelData vmData;
         #endregion
 
         #region public properties
 
-        // Exponer selection listener
+        // Exponer selection listener, solo lectura.
         public SelectionListener SelListener
         {
             get { return selListener; }
         }
+        // Exponer Controllador de mando Xbox, solo lectura
         public xBoxControllerCom XBoxConInstance
         {
             get { return xBoxConInstance; }
         }
-
+        //Exponer vmData
+        public viewModelData VmData
+        {
+            get { return vmData; }
+        }
         #endregion
 
         #region Constructor
-        public AppControl(SldWorks swapp, viewModel vmodel)
+        public AppControl(viewModel vm)
         {
             //instancia actual de solidworks
-            swApp = (SldWorks)swapp;
+            swApp = (SldWorks)vm.SwApp;
+            //Instancia del viewModelData
+            vmData= vm.VmData;
+            // Suscribirse a PropertyChanged del viewmodel
+            vm.PropertyChanged += Vmodel_PropertyChanged;
+            //Inicializar app control
+            initAppControl();
+        }
+
+        #endregion
+
+        public void initAppControl()
+        {
             //Instanciar un listener de selecciones
             selListener = new SelectionListener(swApp);
             //Instanciar el controlador para xbox
             xBoxConInstance = new xBoxControllerCom();
             //Inicializar Mate Manipulator
-            mateM = new MateManipulator(this);
+            kineM = new KinematicManipulator(this);
         }
-        #endregion
 
         #region Connect and disconnect peripherals
         // Conectar mando de xbox
@@ -72,7 +88,8 @@ namespace AddinTesting.model
             try
             {
                 //Instanciar e iniciar controlador del mando
-                if (xBoxConInstance.initXboxControllerComm())
+                xBoxConInstance.initXboxControllerComm();
+                if (XBoxConInstance.IsPlugged)
                 {
                     // Suscribirse al evento del control. Este evento se dispara cada vez que el usuario usa los elementos del mando.
                     xBoxConInstance.controllerUpdatedEvent += controllerUpdatedEventHandler;
@@ -116,21 +133,38 @@ namespace AddinTesting.model
             return false;
         }
 
-        // 
+        // Eventos del modelo actualizan info en el AppController
         private void controllerUpdatedEventHandler(object sender, EventArgs e)
         {
             //Actualizar vmdata para todos los analogos.
             vmData.LeftThumbX = xBoxConInstance.LeftThumbX;
-            vmData.LeftThumbY= xBoxConInstance.LeftThumbY;
+            vmData.LeftThumbY = xBoxConInstance.LeftThumbY;
             vmData.RightThumbX = xBoxConInstance.RightThumbX;
             vmData.RightThumbY = xBoxConInstance.RightThumbY;
             vmData.RightTrigger = xBoxConInstance.RightTrigger;
             vmData.LeftTrigger = xBoxConInstance.LeftTrigger;
+            vmData.IsPlugged = XBoxConInstance.IsPlugged;
 
             //Invocar un refresh de la ui
             appControlUiRefresh?.Invoke(this, vmData);
 
         }
+
+        //Eventos de la UI actualizan info en el AppController
+        private void Vmodel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            //Pasar datos a controlador del mando
+            xBoxConInstance.DeltaT= vmData.DeltaT;
+            XBoxConInstance.DeadZone = vmData.DeadZone;
+
+            //Pasar datos a manipulador cinematico.
+            kineM.DeltaT = vmData.DeltaT;
+            kineM.OmegaMaxZ = VmData.OmegaMaxZ;
+            kineM.VmaxZ = VmData.VmaxZ;
+            kineM.VmaxR = VmData.VmaxR;
+
+        }
+
         #endregion
 
     }

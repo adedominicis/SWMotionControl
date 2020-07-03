@@ -16,9 +16,8 @@ namespace AddinTesting.model
         #region private Fields
         private DispatcherTimer timer;
         private Controller controller;
-        private bool plugStatus;
 
-        // Analog positions
+        // Posiciones analogos, paso N
         private decimal leftThumbX;
         private decimal leftThumbY;
         private decimal rightThumbX;
@@ -26,16 +25,7 @@ namespace AddinTesting.model
         private decimal rightTrigger;
         private decimal leftTrigger;
 
-
-
-        // Analog speeds
-
-        private decimal spdLeftThumbX;
-        private decimal spdLeftThumbY;
-        private decimal spdRightThumbX;
-        private decimal spdRightThumbY;
-        private decimal spdLeftTrigger;
-        private decimal spdRightTrigger;
+        //Posición de los analogos en el paso N-1
         private decimal oldLeftThumbX;
         private decimal oldLeftThumbY;
         private decimal oldRightThumbX;
@@ -43,28 +33,57 @@ namespace AddinTesting.model
         private decimal oldLeftTrigger;
         private decimal oldRightTrigger;
 
-        // Thumbstick position limits. - Limits are symmetrical
+        // Velocidades análogos, paso N
+        private decimal spdLeftThumbX;
+        private decimal spdLeftThumbY;
+        private decimal spdRightThumbX;
+        private decimal spdRightThumbY;
+        private decimal spdLeftTrigger;
+        private decimal spdRightTrigger;
+
+
+        // Limites de posicionamiento de los analogos.
         private const int tsRightLimit = 32767;
         private const int tsUpperLimit = 32767;
         private const int triggerLimit = 255;
         //General deadzone
-        private const int deadZone = 10;
+        private int deadZone;
 
-        //Timing constant
-        private const int tickDelta = 100;
+        //Paso del reloj, ms
+        private int deltaT;
 
-
+        //Control conectado?
+        private bool isPlugged;
 
         #endregion
 
-        #region Public Properties and events.
+        #region Events.
 
         public event EventHandler controllerUpdatedEvent;
         public event EventHandler<bool> controllerPlugStateChanged;
 
+
         #endregion
 
         #region Properties
+
+        // Porcentaje de deadzone en los análogos.
+        public int DeadZone
+        {
+            set { deadZone = value; }
+        }
+
+        //Paso del reloj, ms
+        public int DeltaT
+        {
+            set { deltaT = value; }
+        }
+
+        // Control conectado?
+        public bool IsPlugged
+        {
+            get { return isPlugged; }
+        }
 
         // Analog positions
         public decimal LeftThumbX
@@ -143,26 +162,13 @@ namespace AddinTesting.model
             get { return spdRightTrigger; }
         }
 
-
-        public bool PlugStatus
-        {
-            get { return plugStatus; }
-            set { plugStatus = value; }
-        }
-
-        //Delta T expuesto.
-        public int tickDeltaMilliSec
-        {
-            get { return tickDelta; }
-        }
-
-
         #endregion
 
         #region Metodos
 
-        public bool initXboxControllerComm()
+        public void initXboxControllerComm()
         {
+            controllerPlugStateChanged += changeControllerPlugState;
             controller = new Controller(UserIndex.One);
             if (controller.IsConnected)
             {
@@ -170,24 +176,27 @@ namespace AddinTesting.model
                 controllerPlugStateChanged?.Invoke(this, true);
                 //Crear un timer y ajustar su paso.
                 timer = new DispatcherTimer();
-                timer.Interval = TimeSpan.FromMilliseconds(tickDelta);
+                timer.Interval = TimeSpan.FromMilliseconds(deltaT);
                 //Suscribirse al evento "tick" del timer. Ocurre cada vez que se cumple un paso.
                 timer.Tick += timer_Tick;
                 //Arrancar el timer
                 timer.Start();
-                plugStatus = true;
             }
             else
             {
                 // Notificar a la aplicacion que el control está desconectado
                 endXboxControllerComm();
                 controllerPlugStateChanged?.Invoke(this, false);
-                plugStatus = false;
             }
-            return plugStatus;
-
         }
 
+        //Handler de cambio de estado del control.
+        private void changeControllerPlugState(object sender, bool e)
+        {
+            isPlugged = e;
+        }
+
+        //Desconectar control.
         internal void endXboxControllerComm()
         {
 
@@ -202,7 +211,6 @@ namespace AddinTesting.model
             // Notificar a la aplicación que el control está desconectado
             controllerPlugStateChanged?.Invoke(this, false);
             //Setear estado de conexión
-            plugStatus = false;
 
         }
 
@@ -273,12 +281,12 @@ namespace AddinTesting.model
 
         private void setAnalogspeed()
         {
-            spdLeftThumbX = (decimal)((oldLeftThumbX - leftThumbX) / tickDelta);
-            spdLeftThumbY = (decimal)((oldLeftThumbY - leftThumbY) / tickDelta);
-            spdRightThumbX = (decimal)((oldRightThumbX - rightThumbX) / tickDelta);
-            spdRightThumbY = (decimal)((oldRightThumbY - rightThumbY) / tickDelta);
-            spdLeftTrigger = (decimal)((oldLeftTrigger - leftTrigger) / tickDelta);
-            spdRightTrigger = (decimal)((oldRightTrigger - rightTrigger) / tickDelta);
+            spdLeftThumbX = (decimal)((oldLeftThumbX - leftThumbX) / deltaT);
+            spdLeftThumbY = (decimal)((oldLeftThumbY - leftThumbY) / deltaT);
+            spdRightThumbX = (decimal)((oldRightThumbX - rightThumbX) / deltaT);
+            spdRightThumbY = (decimal)((oldRightThumbY - rightThumbY) / deltaT);
+            spdLeftTrigger = (decimal)((oldLeftTrigger - leftTrigger) / deltaT);
+            spdRightTrigger = (decimal)((oldRightTrigger - rightTrigger) / deltaT);
 
         }
 

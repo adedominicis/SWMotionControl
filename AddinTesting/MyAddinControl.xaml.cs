@@ -39,25 +39,20 @@ namespace AddinTesting
 
         private void btControlDisconnect_Click(object sender, RoutedEventArgs e)
         {
-            if (vm.DisconnectController())
-            {
-                flipButtons();
-            }
-
+            vm.DisconnectController();
+            flipButtons();
         }
 
         private void btControlConnect_Click(object sender, RoutedEventArgs e)
         {
-            if (vm.ConnectController())
-            {
-                flipButtons();
-            }
+            vm.ConnectController();
+            flipButtons();
         }
 
         private void flipButtons()
         {
-            btControlConnect.IsEnabled = !btControlConnect.IsEnabled;
-            btControlDisconnect.IsEnabled = !btControlDisconnect.IsEnabled;
+            btControlDisconnect.IsEnabled = vm.VmData.IsPlugged;
+            btControlConnect.IsEnabled = !vm.VmData.IsPlugged;
         }
     }
 }

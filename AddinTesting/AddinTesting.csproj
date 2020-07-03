@@ -84,10 +84,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="model\AppControl.cs" />
-    <Compile Include="model\MateManipulator.cs" />
+    <Compile Include="model\KinematicManipulator.cs" />
     <Compile Include="model\SelectionListener.cs" />
     <Compile Include="model\viewManipulator.cs" />
-    <Compile Include="model\viewModelData.cs" />
+    <Compile Include="ViewModel\viewModelData.cs" />
     <Compile Include="model\xBoxControllerCom.cs" />
     <Compile Include="MyAddinControl.xaml.cs">
       <DependentUpon>MyAddinControl.xaml</DependentUpon>
@@ -102,6 +102,9 @@
   <ItemGroup>
     <PackageReference Include="AngelSix.SolidDna">
       <Version>1.0.1.8</Version>
+    </PackageReference>
+    <PackageReference Include="Extended.Wpf.Toolkit">
+      <Version>4.0.1</Version>
     </PackageReference>
     <PackageReference Include="SharpDX">
       <Version>4.2.0</Version>

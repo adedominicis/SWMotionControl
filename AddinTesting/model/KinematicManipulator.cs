@@ -1,10 +1,11 @@
 ﻿using SolidWorks.Interop.sldworks;
 using System;
 using System.Windows;
+using AddinTesting.ViewModel;
 
 namespace AddinTesting.model
 {
-    class MateManipulator
+    class KinematicManipulator
     {
         #region Private fields
         private ModelDoc2 swModel;
@@ -12,24 +13,36 @@ namespace AddinTesting.model
         private Mate2 swMate;
         private AngleMateFeatureData swAngleMateData;
         private AppControl miApp;
-        private const int maxRpm = 30;
-        private decimal tickDeltaMilliSec;
+
+
         #endregion
 
         #region Constructores y publicos
-        public MateManipulator(AppControl app)
+        public KinematicManipulator(AppControl app)
+        {
+            miApp = (AppControl)app;
+            initMateManipulator();
+        }
+
+        //Valores de cinemática
+        public int DeltaT { get; set; }
+        public decimal OmegaMaxZ { get; set; }
+        public decimal VmaxZ { get; set; }
+        public decimal VmaxR { get; set; }
+
+        #endregion
+
+
+        #region Metodos
+        private void initMateManipulator()
         {
             //Suscribirse a evento de seleccion de mates.
-            app.SelListener.userSelectedFeature -= mateSelectedHandler;
-            app.SelListener.userSelectedFeature += mateSelectedHandler;
+            miApp.SelListener.userSelectedFeature -= mateSelectedHandler;
+            miApp.SelListener.userSelectedFeature += mateSelectedHandler;
             //Suscribirse al refresh del control
-            app.appControlUiRefresh -= App_appControlUiRefresh;
-            app.appControlUiRefresh += App_appControlUiRefresh;
-            tickDeltaMilliSec = app.XBoxConInstance.tickDeltaMilliSec;
+            miApp.appControlUiRefresh -= App_appControlUiRefresh;
+            miApp.appControlUiRefresh += App_appControlUiRefresh;
 
-            miApp=(AppControl)app;
-
-            
         }
 
         private void App_appControlUiRefresh(object sender, viewModelData e)
@@ -56,10 +69,7 @@ namespace AddinTesting.model
             swFeat = (Feature)feat;
             swModel = (ModelDoc2)sl.SwModel;
         }
-        #endregion
-
-        #region Metodos
-
+        
         private void angleMateManipulator(Feature angleMateFeat)
         {
             swMate = (Mate2)angleMateFeat.GetSpecificFeature2();
@@ -67,13 +77,13 @@ namespace AddinTesting.model
             
             // Controlador xbox
 
-            if (miApp.XBoxConInstance.PlugStatus)
+            if (miApp.VmData.IsPlugged)
             {
 
                 //Calcular el incremento
 
                 //Sumar incremento
-                double delta = (double)getDelta(miApp.XBoxConInstance.LeftThumbX);
+                double delta = (double)getDelta(miApp.VmData.LeftThumbX);
                 if (Math.Abs(delta)>0)
                 {
                     swAngleMateData.Angle = swAngleMateData.Angle + delta;
@@ -89,9 +99,10 @@ namespace AddinTesting.model
  
         }
 
+        #endregion
 
+        #region Math Helpers
 
-        // Math helpers.
         private double degToRad(decimal deg)
         {
             return (180.0 * (double)deg / Math.PI);
@@ -105,13 +116,13 @@ namespace AddinTesting.model
         private decimal getDelta(decimal percent)
         {
             // Velocidad angular requerida
-            decimal rpm = maxRpm * percent / 100;
+            decimal OmegaZ = OmegaMaxZ * percent / 100;
 
             //Velocidad angular en radianes/sec
-            decimal radSec= (decimal)(2 * Math.PI * (double)rpm) / 60M;
+            decimal OmegaZradSec= (decimal)(2 * Math.PI * (double)OmegaZ) / 60M;
 
             //Angulo recorrido en grados en el tiempo de calculo
-            return radSec* tickDeltaMilliSec/1000;
+            return OmegaZradSec * DeltaT/1000;
 
         }
 

@@ -4,33 +4,43 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:AddinTesting"
+             xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
-    <Grid Background="Linen">
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="120"/>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="*"/>
+    <StackPanel Orientation="Vertical" Background="Linen">
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="40"/>
+            </Grid.RowDefinitions>
 
-        </Grid.ColumnDefinitions>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="22"/>
-            <RowDefinition Height="22"/>
-            <RowDefinition Height="22"/>
-            <RowDefinition Height="22"/>
-            <RowDefinition Height="22"/>
-            <RowDefinition Height="22"/>
-            <RowDefinition Height="22"/>
-            <RowDefinition Height="22"/>
-            <RowDefinition Height="22"/>
-            <RowDefinition Height="22"/>
-            <RowDefinition Height="22"/>
-            <RowDefinition Height="22"/>
-            <RowDefinition Height="*"/>
-        </Grid.RowDefinitions>
+            <Label Content="CONTROL DE MOVIMIENTO EXTERNO"
+                   HorizontalAlignment="center"
+                   FontWeight="Bold"></Label>
+        </Grid>
+        <Grid Background="LightYellow">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="60"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
 
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="26"/>
+            </Grid.RowDefinitions>
 
-        <Button Grid.Row="10" Grid.Column="1"
+            
+            <!--Mando-->
+            <Label Grid.Row="10" Grid.Column="0"
+               VerticalAlignment="Center"
+               HorizontalAlignment="Left"
+               FontSize="9"
+               FontWeight="Bold" Content="MANDO"/>
+
+            <Button Grid.Row="10" Grid.Column="1"
+                IsEnabled="{Binding Path=IsPlugged}"
                 Content="CONECTAR"
                 FontSize="10" 
                 FontWeight="Bold"
@@ -39,119 +49,253 @@
                 Background="LightGreen"
                 Margin=" 2 2 2 2 "/>
 
-        <Button Grid.Row="10" Grid.Column="2"
+            <Button Grid.Row="10" Grid.Column="2"
+                IsEnabled="{Binding Path=IsPlugged}"
                 Content="DESCONECTAR"
                 FontSize="10" 
                 FontWeight="Bold"
                 Click="btControlDisconnect_Click"
                 Name="btControlDisconnect"
                 Background="IndianRed"
-                Margin=" 2 2 2 2 "
-                IsEnabled="False"/>
+                Margin=" 2 2 2 2 "/>
+        </Grid>
+        <Grid Background="LightSteelBlue">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="110"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
 
-        <Label Grid.Row="0" Grid.Column="0"
-               VerticalAlignment="Center"
-               HorizontalAlignment="Left"
-               FontSize="9"
-               FontWeight="Bold" Content="Thumbstick Izquierdo X"/>
-        <Label Grid.Row="1" Grid.Column="0"
-               VerticalAlignment="Center"
-               HorizontalAlignment="Left"
-               FontSize="9"
-               FontWeight="Bold" Content="Thumbstick Izquierdo Y"/>
-        <Label Grid.Row="2" Grid.Column="0"
-               VerticalAlignment="Center"
-               HorizontalAlignment="Left"
-               FontSize="9"
-               FontWeight="Bold" Content="Thumbstick Derecho X"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="26"/>
+                <RowDefinition Height="26"/>
+                <RowDefinition Height="26"/>
+                <RowDefinition Height="26"/>
+                <RowDefinition Height="26"/>
 
-        <Label Grid.Row="3" Grid.Column="0"
-               VerticalAlignment="Center"
-               HorizontalAlignment="Left"
-               FontSize="9"
-               FontWeight="Bold" Content="Thumbstick Derecho Y"/>
+            </Grid.RowDefinitions>
 
-        <Label Grid.Row="4" Grid.Column="0"
+            <Label Grid.Row="0" Grid.Column="1"
                VerticalAlignment="Center"
-               HorizontalAlignment="Left"
+               HorizontalAlignment="Center"
                FontSize="9"
-               FontWeight="Bold" Content="Left Trigger"/>
+               FontWeight="Bold" Content="X (%)"/>
 
-        <Label Grid.Row="5" Grid.Column="0"
+            <Label Grid.Row="0" Grid.Column="2"
                VerticalAlignment="Center"
-               HorizontalAlignment="Left"
+               HorizontalAlignment="Center"
                FontSize="9"
-               FontWeight="Bold" Content="Right Trigger"/>
-        
-        <Label Grid.Row="6" Grid.Column="0"
-               VerticalAlignment="Center"
-               HorizontalAlignment="Left"
-               FontSize="9"
-               FontWeight="Bold">BUTTONS</Label>
+               FontWeight="Bold" Content="Y (%)"/>
 
-        <Label Grid.Row="7" Grid.Column="0"
+            <!--Analogo izquierdo-->
+
+            <Label Grid.Row="1" Grid.Column="0"
                VerticalAlignment="Center"
                HorizontalAlignment="Left"
                FontSize="9"
-               FontWeight="Bold" Content="Mate Name:"/>
+               FontWeight="Bold" Content="ANÁLOGO IZQUIERDO"/>
 
-        <Label Grid.Row="10" Grid.Column="0"
-               VerticalAlignment="Center"
-               HorizontalAlignment="Left"
-               FontSize="9"
-               FontWeight="Bold" Content="Control de XBOX ONE:"/>
-
-        <TextBox Grid.Row="0" Grid.Column="1"
+            <TextBox Grid.Row="1" Grid.Column="1"
                Text="{Binding LeftThumbXAxis, UpdateSourceTrigger=PropertyChanged,Mode=OneWay}"
                VerticalAlignment="Center"
-               HorizontalAlignment="Center"
+               HorizontalAlignment="Stretch"
                FontSize="16"
+               Margin=" 2 2 2 2 "
                FontWeight="Bold"/>
-        <TextBox Grid.Row="1" Grid.Column="1"
+
+            <TextBox Grid.Row="1" Grid.Column="2"
                Text="{Binding LeftThumbYAxis, UpdateSourceTrigger=PropertyChanged,Mode=OneWay}"
                VerticalAlignment="Center"
-               HorizontalAlignment="Center"
+               HorizontalAlignment="Stretch"
                FontSize="16"
-               FontWeight="Bold"/>
-        <TextBox Grid.Row="2" Grid.Column="1"
+               FontWeight="Bold"
+               Margin=" 2 2 2 2 "/>
+
+
+            <!--Analogo Derecho-->
+
+            <Label Grid.Row="2" Grid.Column="0"
+               VerticalAlignment="Center"
+               HorizontalAlignment="Left"
+               FontSize="9"
+               FontWeight="Bold" Content="ANÁLOGO DERECHO"/>
+
+            <TextBox Grid.Row="2" Grid.Column="1"
                Text="{Binding RightThumbXAxis, UpdateSourceTrigger=PropertyChanged,Mode=OneWay}"
                VerticalAlignment="Center"
-               HorizontalAlignment="Center"
+               HorizontalAlignment="Stretch"
+               Margin=" 2 2 2 2 "
                FontSize="16"
                FontWeight="Bold"/>
-        <TextBox Grid.Row="3" Grid.Column="1"
+
+            <TextBox Grid.Row="2" Grid.Column="2"
                Text="{Binding RightThumbYAxis, UpdateSourceTrigger=PropertyChanged,Mode=OneWay}"
                VerticalAlignment="Center"
-               HorizontalAlignment="Center"
+               HorizontalAlignment="Stretch"
+               Margin=" 2 2 2 2 "
                FontSize="16"
                FontWeight="Bold"/>
 
-        <TextBox Grid.Row="4" Grid.Column="1"
-               Text="{Binding LeftTrigger, UpdateSourceTrigger=PropertyChanged,Mode=OneWay}"
-               VerticalAlignment="Center"
-               HorizontalAlignment="Center"
-               FontSize="16"
-               FontWeight="Bold"/>
-        <TextBox Grid.Row="5" Grid.Column="1"
-               Text="{Binding RightTrigger, UpdateSourceTrigger=PropertyChanged,Mode=OneWay}"
-               VerticalAlignment="Center"
-               HorizontalAlignment="Center"
-               FontSize="16"
-               FontWeight="Bold"/>
+            <!--Gatillos-->
 
-        <TextBox Grid.Row="6" Grid.Column="1"
-               Text="{Binding Buttons, UpdateSourceTrigger=PropertyChanged,Mode=OneWay}"
+            <Label Grid.Row="3" Grid.Column="1"
                VerticalAlignment="Center"
                HorizontalAlignment="Center"
                FontSize="9"
+               FontWeight="Bold" Content="IZQUIERDO"/>
+
+            <Label Grid.Row="3" Grid.Column="2"
+               VerticalAlignment="Center"
+               HorizontalAlignment="Center"
+               FontSize="9"
+               FontWeight="Bold" Content="DERECHO"/>
+
+            <TextBox Grid.Row="4" Grid.Column="1"
+               Text="{Binding LeftTrigger, UpdateSourceTrigger=PropertyChanged,Mode=OneWay}"
+               VerticalAlignment="Center"
+               HorizontalAlignment="Stretch"
+               Margin=" 2 2 2 2 "
+               FontSize="16"
                FontWeight="Bold"/>
-        <TextBox Grid.Row="7" Grid.Column="1" Grid.ColumnSpan="2"
-               Text="{Binding MateName, UpdateSourceTrigger=PropertyChanged,Mode=OneWay}"
+
+            <TextBox Grid.Row="4" Grid.Column="2"
+               Text="{Binding RightTrigger, UpdateSourceTrigger=PropertyChanged,Mode=OneWay}"
+               VerticalAlignment="Center"
+               HorizontalAlignment="Stretch"
+               Margin=" 2 2 2 2 "
+               FontSize="16"
+               FontWeight="Bold"/>
+
+            <Label Grid.Row="4" Grid.Column="0"
+               VerticalAlignment="Center"
+               HorizontalAlignment="Left"
+               FontSize="9"
+               FontWeight="Bold" Content="GATILLOS"/>
+
+
+
+
+
+
+
+
+        </Grid>
+        <Grid Background="LightCyan">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="26"/>
+                <RowDefinition Height="26"/>
+                <RowDefinition Height="26"/>
+            </Grid.RowDefinitions>
+            <Label Grid.Row="0" Grid.Column="0"
+               VerticalAlignment="Center"
+               Grid.ColumnSpan="6
+                   "
+               HorizontalAlignment="Center"
+               FontSize="9"
+               FontWeight="Bold" Content="AJUSTE DE RÁPIDOS"/>
+            
+            <!--Ticker-->
+
+            <Label Grid.Row="2" Grid.Column="0"
+               VerticalAlignment="Center"
+               HorizontalAlignment="Left"
+               FontSize="9"
+               FontWeight="Bold" Content="DELTA T [ms]"/>
+
+            <xctk:IntegerUpDown Grid.Row="2" Grid.Column="1"
+               Text="{Binding DeltaT, UpdateSourceTrigger=PropertyChanged,Mode=OneWayToSource}"
                VerticalAlignment="Center"
                HorizontalAlignment="Stretch"
                FontSize="9"
-               Margin="2"
+               Margin="2 2 2 2"
+               FontWeight="Bold"
+               Value="20"/>
+            
+            <!--Velocidades angulares Z-->
+
+            <Label Grid.Row="1" Grid.Column="0"
+               VerticalAlignment="Center"
+               HorizontalAlignment="Left"
+               FontSize="9"
+               FontWeight="Bold" Content="ω max [Z]"/>
+
+
+            <xctk:DecimalUpDown Grid.Row="1" Grid.Column="1"
+               Text="{Binding OmegaMaxZ, UpdateSourceTrigger=PropertyChanged,Mode=OneWayToSource}"
+               VerticalAlignment="Center"
+               HorizontalAlignment="Stretch"
+               FontSize="9"
+               Margin="2 2 2 2"
+               FontWeight="Bold"
+               Value="40"/>
+
+            <!--Velocidades radiales-->
+
+            <Label Grid.Row="1" Grid.Column="2"
+               VerticalAlignment="Center"
+               HorizontalAlignment="Left"
+               FontSize="9"
+               FontWeight="Bold" Content="V max [R]"/>
+
+
+            <xctk:DecimalUpDown Grid.Row="1" Grid.Column="3"
+               Text="{Binding VmaxR, UpdateSourceTrigger=PropertyChanged,Mode=OneWayToSource}"
+               VerticalAlignment="Center"
+               HorizontalAlignment="Stretch"
+               FontSize="9"
+               Margin="2 2 2 2"
+               Value="40"
                FontWeight="Bold"/>
-        
-    </Grid>
+
+
+            <!--Velocidades Verticales-->
+
+            <Label Grid.Row="1" Grid.Column="4"
+               VerticalAlignment="Center"
+               HorizontalAlignment="Left"
+               FontSize="9"
+               FontWeight="Bold" Content="V max [Z]"/>
+
+
+            <xctk:DecimalUpDown Grid.Row="1" Grid.Column="5"
+               Text="{Binding VmaxZ, UpdateSourceTrigger=PropertyChanged,Mode=OneWayToSource}"
+               VerticalAlignment="Center"
+               HorizontalAlignment="Stretch"
+               FontSize="9"
+               Margin="2 2 2 2"
+               Value="40"
+               FontWeight="Bold"/>
+
+
+            <!--Velocidades Verticales-->
+
+            <Label Grid.Row="2" Grid.Column="2"
+               VerticalAlignment="Center"
+               HorizontalAlignment="Left"
+               FontSize="9"
+               FontWeight="Bold" Content="Deadzone [%]"/>
+
+
+            <xctk:IntegerUpDown Grid.Row="2" Grid.Column="3"
+               Text="{Binding DeadZone, UpdateSourceTrigger=PropertyChanged,Mode=OneWayToSource}"
+               VerticalAlignment="Center"
+               HorizontalAlignment="Stretch"
+               FontSize="9"
+               Margin="2 2 2 2"
+               FontWeight="Bold"
+               Value="10"/>
+
+        </Grid>
+
+    </StackPanel>
+
 </UserControl>

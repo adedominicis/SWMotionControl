@@ -14,9 +14,10 @@ namespace AddinTesting.ViewModel
 
         #region private fields
         private SldWorks swApp;
-        private viewModelData vmData=new viewModelData();
+        private viewModelData vmData = new viewModelData();
         private AppControl miApp;
-        
+
+
         #endregion
 
         #region UI Bound properties.
@@ -76,26 +77,89 @@ namespace AddinTesting.ViewModel
 
         }
 
+        // Velocidad máxima en Z
+        public decimal VmaxZ
+        {
+            get { return vmData.VmaxZ; }
+            set
+            {
+                vmData.VmaxZ = value;
+                OnPropertyChanged("VmaxZ");
+            }
+        }
+        //Velocidad máxima en el plano radial del eje  1
+        public decimal VmaxR
+        {
+            get { return vmData.VmaxR; }
+            set
+            {
+                vmData.VmaxR = value;
+                OnPropertyChanged("VmaxR");
+            }
+        }
+        //Intervalo de tiempo para la resolución de constraints y rendering
+        public int DeltaT
+        {
+            get { return vmData.DeltaT; }
+            set
+            {
+                vmData.DeltaT = value;
+                OnPropertyChanged("DeltaT");
+            }
+        }
+        // Velocidad angular máxima eje 1
+        public decimal OmegaMaxZ
+
+        {
+            get { return vmData.OmegaMaxZ; }
+            set
+            {
+                vmData.OmegaMaxZ = value;
+                OnPropertyChanged("OmegaMaxZ");
+            }
+        }
+        // Porcentaje de deadzone
+        public int DeadZone
+        {
+            get { return vmData.DeadZone; }
+            set
+            {
+                vmData.DeadZone = value;
+                OnPropertyChanged("DeadZone");
+            }
+        }
+        // Exponer objeto vmData para el appcontrol
+        public viewModelData VmData
+        {
+            get { return vmData; }
+        }
+        //Exponer objeto sldworks para el appcontrol.
+        public SldWorks SwApp
+        {
+            get { return swApp; }
+        } 
+
+        // Exponer data del viewmodel, solo lectura
+
         #endregion
 
         #region Inicializar
 
         public void initVM()
         {
-
             try
             {
                 // Obtener Instancia activa de solidworks
                 swApp = (SldWorks)System.Runtime.InteropServices.Marshal.GetActiveObject("SldWorks.Application");
                 // Generar instancia de app control
-                miApp = new AppControl(swApp, this);
+                miApp = new AppControl(this);
                 //Suscribirse a eventos de miapp.
                 miApp.appControlUiRefresh -= MiApp_appControlUiRefresh;
                 miApp.appControlUiRefresh += MiApp_appControlUiRefresh;
             }
             catch (Exception e)
             {
-                MessageBox.Show("Error en inicializacion de viewModel: "+e.Message);
+                MessageBox.Show("Error en inicializacion de viewModel: " + e.Message);
             }
         }
 
@@ -138,8 +202,8 @@ namespace AddinTesting.ViewModel
             OnPropertyChanged("RightThumbYAxis");
             OnPropertyChanged("RightTrigger");
             OnPropertyChanged("LeftTrigger");
-        }
 
+        }
 
         #endregion
 
