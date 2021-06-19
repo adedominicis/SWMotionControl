@@ -57,24 +57,33 @@ namespace XboxController
 
         void DisplayControllerInformation()
         {
-            var state = _controller.GetState();
+            try
+            {
+                var state = _controller.GetState();
 
-            // Thumbstick percentage
-            ltsXPercent = Math.Round(100 - ((double)(tsRightLimit - state.Gamepad.LeftThumbX) / tsRightLimit) * 100);
-            ltsYPercent = Math.Round(100 - ((double)(tsUpperLimit - state.Gamepad.LeftThumbY) / tsUpperLimit) * 100);
-            rtsXPercent = Math.Round(100 - ((double)(tsRightLimit - state.Gamepad.RightThumbX) / tsRightLimit) * 100);
-            rtsYPercent = Math.Round(100 - ((double)(tsUpperLimit - state.Gamepad.RightThumbY) / tsUpperLimit) * 100);
+                // Thumbstick percentage
+                ltsXPercent = Math.Round(100 - ((double)(tsRightLimit - state.Gamepad.LeftThumbX) / tsRightLimit) * 100);
+                ltsYPercent = Math.Round(100 - ((double)(tsUpperLimit - state.Gamepad.LeftThumbY) / tsUpperLimit) * 100);
+                rtsXPercent = Math.Round(100 - ((double)(tsRightLimit - state.Gamepad.RightThumbX) / tsRightLimit) * 100);
+                rtsYPercent = Math.Round(100 - ((double)(tsUpperLimit - state.Gamepad.RightThumbY) / tsUpperLimit) * 100);
 
-            // Trigger percentage
+                // Trigger percentage
 
-            rtrgPercent = Math.Round(100 - ((double)(triggerLimit - state.Gamepad.RightTrigger) / triggerLimit) * 100);
-            ltrgPercent = Math.Round(100 - ((double)(triggerLimit - state.Gamepad.LeftTrigger) / triggerLimit) * 100);
+                rtrgPercent = Math.Round(100 - ((double)(triggerLimit - state.Gamepad.RightTrigger) / triggerLimit) * 100);
+                ltrgPercent = Math.Round(100 - ((double)(triggerLimit - state.Gamepad.LeftTrigger) / triggerLimit) * 100);
 
-            RightTrigger = rtrgPercent.ToString();
-            LeftTrigger = ltrgPercent.ToString();
-            LeftAxis = string.Format("X: {0} % Y: {1} %", ltsXPercent, ltsYPercent);
-            RightAxis = string.Format("X: {0} % Y: {1} %", rtsXPercent, rtsYPercent);
-            Buttons = string.Format("{0}", state.Gamepad.Buttons);
+                RightTrigger = rtrgPercent.ToString();
+                LeftTrigger = ltrgPercent.ToString();
+                LeftAxis = string.Format("X: {0} % Y: {1} %", ltsXPercent, ltsYPercent);
+                RightAxis = string.Format("X: {0} % Y: {1} %", rtsXPercent, rtsYPercent);
+                Buttons = string.Format("{0}", state.Gamepad.Buttons);
+            }
+            catch (Exception e)
+            {
+
+                MessageBox.Show("Excepcion en  DisplayControllerInformation() " + e.Message);
+            }
+            
 
         }
 

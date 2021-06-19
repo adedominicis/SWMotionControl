@@ -96,7 +96,7 @@
                FontWeight="Bold" Content="ANÁLOGO IZQUIERDO"/>
 
             <TextBox Grid.Row="1" Grid.Column="1"
-               Text="{Binding LeftThumbXAxis, UpdateSourceTrigger=PropertyChanged,Mode=OneWay}"
+               Text="{Binding txLeftAnalogX, UpdateSourceTrigger=PropertyChanged,Mode=OneWay}"
                VerticalAlignment="Center"
                HorizontalAlignment="Stretch"
                FontSize="16"
@@ -104,7 +104,7 @@
                FontWeight="Bold"/>
 
             <TextBox Grid.Row="1" Grid.Column="2"
-               Text="{Binding LeftThumbYAxis, UpdateSourceTrigger=PropertyChanged,Mode=OneWay}"
+               Text="{Binding txLeftAnalogY, UpdateSourceTrigger=PropertyChanged,Mode=OneWay}"
                VerticalAlignment="Center"
                HorizontalAlignment="Stretch"
                FontSize="16"
@@ -121,7 +121,7 @@
                FontWeight="Bold" Content="ANÁLOGO DERECHO"/>
 
             <TextBox Grid.Row="2" Grid.Column="1"
-               Text="{Binding RightThumbXAxis, UpdateSourceTrigger=PropertyChanged,Mode=OneWay}"
+               Text="{Binding txRightAnalogX, UpdateSourceTrigger=PropertyChanged,Mode=OneWay}"
                VerticalAlignment="Center"
                HorizontalAlignment="Stretch"
                Margin=" 2 2 2 2 "
@@ -129,7 +129,7 @@
                FontWeight="Bold"/>
 
             <TextBox Grid.Row="2" Grid.Column="2"
-               Text="{Binding RightThumbYAxis, UpdateSourceTrigger=PropertyChanged,Mode=OneWay}"
+               Text="{Binding txRightAnalogY, UpdateSourceTrigger=PropertyChanged,Mode=OneWay}"
                VerticalAlignment="Center"
                HorizontalAlignment="Stretch"
                Margin=" 2 2 2 2 "
@@ -151,7 +151,7 @@
                FontWeight="Bold" Content="DERECHO"/>
 
             <TextBox Grid.Row="4" Grid.Column="1"
-               Text="{Binding LeftTrigger, UpdateSourceTrigger=PropertyChanged,Mode=OneWay}"
+               Text="{Binding txLeftTrigger, UpdateSourceTrigger=PropertyChanged,Mode=OneWay}"
                VerticalAlignment="Center"
                HorizontalAlignment="Stretch"
                Margin=" 2 2 2 2 "
@@ -159,7 +159,7 @@
                FontWeight="Bold"/>
 
             <TextBox Grid.Row="4" Grid.Column="2"
-               Text="{Binding RightTrigger, UpdateSourceTrigger=PropertyChanged,Mode=OneWay}"
+               Text="{Binding txRightTrigger, UpdateSourceTrigger=PropertyChanged,Mode=OneWay}"
                VerticalAlignment="Center"
                HorizontalAlignment="Stretch"
                Margin=" 2 2 2 2 "

@@ -23,7 +23,7 @@ namespace AddinTesting.ViewModel
         #region UI Bound properties.
 
         // Eje horizontal del joy izquierdo
-        public string LeftThumbXAxis
+        public string txLeftAnalogX
         {
             get
             {
@@ -32,16 +32,16 @@ namespace AddinTesting.ViewModel
 
         }
         //Eje vertical del joy izquierdo
-        public string LeftThumbYAxis
+        public string txLeftAnalogY
         {
             get
             {
-                return vmData.LeftThumbY.ToString();
+                return vmData.LeftThumbX.ToString();
             }
 
         }
         // Eje horizontal del joy derecho
-        public string RightThumbXAxis
+        public string txRightAnalogX
         {
             get
             {
@@ -50,7 +50,7 @@ namespace AddinTesting.ViewModel
 
         }
         //Eje vertical del joy derecho
-        public string RightThumbYAxis
+        public string txRightAnalogY
         {
             get
             {
@@ -59,7 +59,7 @@ namespace AddinTesting.ViewModel
 
         }
         //Trigger derecho
-        public string RightTrigger
+        public string txRightTrigger
         {
             get
             {
@@ -68,7 +68,7 @@ namespace AddinTesting.ViewModel
 
         }
         //Trigger izquierdo
-        public string LeftTrigger
+        public string txLeftTrigger
         {
             get
             {
@@ -196,10 +196,10 @@ namespace AddinTesting.ViewModel
         private void MiApp_appControlUiRefresh(object sender, viewModelData vmdata)
         {
             vmData = (viewModelData)vmdata;
-            OnPropertyChanged("LeftThumbXAxis");
-            OnPropertyChanged("LeftThumbYAxis");
-            OnPropertyChanged("RightThumbXAxis");
-            OnPropertyChanged("RightThumbYAxis");
+            OnPropertyChanged("LeftAnalogX");
+            OnPropertyChanged("LeftAnalogY");
+            OnPropertyChanged("RightAnalogX");
+            OnPropertyChanged("RightAnalogY");
             OnPropertyChanged("RightTrigger");
             OnPropertyChanged("LeftTrigger");
 
