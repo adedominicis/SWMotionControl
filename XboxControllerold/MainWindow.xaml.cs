@@ -80,8 +80,8 @@ namespace XboxController
             }
             catch (Exception e)
             {
-
                 MessageBox.Show("Excepcion en  DisplayControllerInformation() " + e.Message);
+                Environment.Exit(1);
             }
             
 
